@@ -7,7 +7,7 @@ public class DynArray<T>{
     public DynArray(){ 
     }
     public DynArray(T a[]){ 
-        //In a language with better memory control could be done with next to no array copys
+        //In a language with better memory control could be done with next to no array copies
         int len = a.length;
         int t3s = (len>>>3*8)&0xff;//[t3s][][][]
         int t2s = (len>>>2*8)&0xff;//[][t2s][][]
@@ -38,6 +38,9 @@ public class DynArray<T>{
     }
 
     public int compact(){
+        return this.cloneCompact(this);
+    }
+    public int cloneCompact(DynArray<T> d){
         int ptr=0;
         if(t3==null)return 0;
         for(T[][][] t2:t3){
@@ -48,12 +51,44 @@ public class DynArray<T>{
                     if(t0==null)continue;
                     for(T t:t0){
                         if(t==null)continue;
-                        this.set(ptr++, t);
+                        d.set(ptr++, t);
                     }
                 }
             }
         }
         return ptr;
+    }
+    public int clone(DynArray<T> d){
+        int ptr=0;
+        int size=0;
+        if(t3==null)return 0;
+        for(T[][][] t2:t3){
+            if(t2==null){
+                ptr+=0x1>>24;
+                continue;
+            }
+            for(T[][] t1:t2){
+                if(t1==null){
+                    ptr+=0x1>>16;
+                    continue;
+                }
+                for(T[] t0:t1){
+                    if(t0==null){
+                        ptr+=0x1>>8;
+                        continue;
+                    }
+                    for(T t:t0){
+                        if(t==null){
+                            ptr++;
+                            continue;
+                        }
+                        size++;
+                        d.set(ptr++, t);
+                    }
+                }
+            }
+        }
+        return size;
     }
     public void setArray(int ind, T a[]){
         if(((long)ind+a.length)>=0x1l<<32)throw new ArrayIndexOutOfBoundsException();
@@ -217,46 +252,30 @@ public class DynArray<T>{
     }
     public T[][][] getRegion(int ind){
         if(t3==null){return null;}
-        ind = ind&0xff;
-        return t3[ind];
+        return t3[ind&0xff];
     }
     public T[][] getChunk(int ind){
-        if(t3==null){return null;}
-        int a=ind>>>(1*8)&0xff;
-        T[][][] t2=t3[a];
+        T[][][] t2=getRegion(ind>>>8);
         if(t2==null){return null;}
-        int b=ind&0xff;
-        return t2[b];
+        return t2[ind&0xff];
     }
     public T[] getPage(int ind){
-        if(t3==null){return null;}
-        int a=ind>>>(2*8)&0xff;
-        T[][][] t2=t3[a];
-        if(t2==null){return null;}
-        int b=ind>>>(1*8)&0xff;
-        T[][] t1=t2[b];
+        T[][] t1=getChunk(ind>>>8);
         if(t1==null){return null;}
-        int c=ind&0xff;
-        return t1[c];
+        return t1[ind&0xff];
     }
     public T get(int ind){
-        if(t3==null){return null;}
-        int a=ind>>>(3*8)&0xff;
-        T[][][] t2=t3[a];
-        if(t2==null){return null;}
-        int b=ind>>>(2*8)&0xff;
-        T[][] t1=t2[b];
-        if(t1==null){return null;}
-        int c=ind>>>(1*8)&0xff;
-        T[] t0=t1[c];
+        T[] t0=getPage(ind>>>8);
         if(t0==null){return null;}
-        int d=ind>>>(0*8)&0xff;
-        return t0[d];
+        return t0[ind&0xff];
+    }
+    public T[] toArray(){
+        DynArray<T> d = new DynArray<T>();
+        int len = this.cloneCompact(d);
+        return (T[]) d.getArray(0, len);
     }
     @Override
     public String toString(){
-        int len = this.compact();
-        T arr[] = (T[]) this.getArray(0, len);
-        return Arrays.toString(arr);
+        return Arrays.toString(this.toArray());
     }
 }
