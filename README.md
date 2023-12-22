@@ -26,15 +26,15 @@ T get(int ind)
 
 Sets internal storage component at their coresponding indeces.<br>
 All arrays should be precisely 256 elements, but sizes will not be checked.<br>
-If larger arrays are set, out of bounds ellements are unaccesible.<br>
-If smaller arrays are set, you will get an index out of bounds axception when getting ellements
+If larger arrays are set, out of bounds elements are inaccesible.<br>
+If smaller arrays are set, you will get an index out of bounds axception when getting elements
 ```java
 setRegion(int ind, T[][][] el)
 setChunk(int ind, T[][] el)
 setPage(int ind, T[] el)
 ```
 
-Sets all the ellements of the array starting at the index
+Sets all the elements of the array starting at the index
 ```java
 setArray(int ind, T a[])
 ```
@@ -46,22 +46,22 @@ T[][] getChunk(int ind)
 T[] getPage(int ind)
 ```
 
-Gets an array of ellements of specified length starting at the index
+Gets an array of elements of specified length starting at the index
 ```java
 T[] getArray(int ind, int len)
 ```
 
-Clones the DynArray into an new DynAray of same type, returning number of non null ellements
+Clones the DynArray into an new DynAray of same type, returning number of non null elements
 ```java
 int clone(DynArray<T> d)
 ```
 
-Clones the DynArray into an new DynAray of same type and compacts it by leaving out null ellements, returns number of non null ellements
+Clones the DynArray into an new DynAray of same type and compacts it by leaving out null elements, returns number of non null elements
 ```java
 int cloneCompact(DynArray<T> d)
 ```
 
-Compacts the DynArray by leaving out null ellements, returns number of non null ellements
+Compacts the DynArray by leaving out null elements, returns number of non null elements
 ```java
 int compact()
 ```
