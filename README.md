@@ -26,15 +26,15 @@ T get(int ind)
 
 Sets internal storage component at their coresponding indeces.<br>
 All arrays should be precisely 256 elements, but sizes will not be checked.<br>
-If larger arrays are set out of bounds ellements are un accesible.<br>
-If smaler arrays are set you will get an index out of bounds axception when getting ellements
+If larger arrays are set, out of bounds ellements are unaccesible.<br>
+If smaller arrays are set, you will get an index out of bounds axception when getting ellements
 ```java
 setRegion(int ind, T[][][] el)
 setChunk(int ind, T[][] el)
 setPage(int ind, T[] el)
 ```
 
-Sets an any length array at the index
+Sets all the ellements of the array starting at the index
 ```java
 setArray(int ind, T a[])
 ```
@@ -46,7 +46,7 @@ T[][] getChunk(int ind)
 T[] getPage(int ind)
 ```
 
-Gets an array of specified length starting at the index
+Gets an array of ellements of specified length starting at the index
 ```java
 T[] getArray(int ind, int len)
 ```
@@ -71,7 +71,7 @@ Converts the entire DynArray into a compacted array of same type
 T[] toArray()
 ```
 
-Stringefies the compacted DynArray
+Stringifies the compacted DynArray
 ```java
 String toString()
 ```
